@@ -1,0 +1,57 @@
+# ~/.tmuxinator/gs.yml
+
+name: gs
+root: ~/dev/gs
+
+# Optional tmux socket
+# socket_name: foo
+
+# Runs before everything. Use it to start daemons etc.
+# pre: sudo /etc/rc.d/mysqld start
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+# pre_window: rbenv shell 2.0.0-p247
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+
+# Change the command to call tmux.  This can be used by derivatives/wrappers like byobu.
+# tmux_command: byobu
+
+# Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
+# startup_window: logs
+
+# Controls whether the tmux session should be attached to automatically. Defaults to true.
+# attach: false
+
+# Runs after everything. Use it to attach to tmux with custom options etc.
+# post: tmux -CC attach -t gs
+
+windows:
+  - app:
+      root: ~/dev/gs/app
+      layout: even-vertical
+      panes:
+        - ELASTIC_SEARCH_INDEX=app MONGO_URL=mongodb://localhost:27017/app meteor --settings settings.json
+        - htop
+        - meteor test-packages --port 3010
+  - core:
+      root: ~/dev/gs/core
+      layout: main-horizontal
+      panes:
+        - ls
+        - grunt run:babel
+        - grunt run:babel-test
+  - cli:
+      root: ~/dev/gs/cli
+      layout: even-vertical
+      panes:
+        - gorillastack help
+        - ls
+  - rabbitmq-workers:
+      root: ~/dev/gs/rabbitmq-workers
+      layout: main-horizontal
+      panes:
+        - ls
+        - grunt run:babel
+        - ls

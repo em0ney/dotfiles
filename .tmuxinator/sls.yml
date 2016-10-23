@@ -1,0 +1,42 @@
+# ~/.tmuxinator/sls.yml
+
+name: sls
+root: ~/dev/gs
+
+# Optional tmux socket
+# socket_name: foo
+
+# Runs before everything. Use it to start daemons etc.
+# pre: sudo /etc/rc.d/mysqld start
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+# pre_window: rbenv shell 2.0.0-p247
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+
+# Change the command to call tmux.  This can be used by derivatives/wrappers like byobu.
+# tmux_command: byobu
+
+# Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
+# startup_window: logs
+
+# Controls whether the tmux session should be attached to automatically. Defaults to true.
+# attach: false
+
+# Runs after everything. Use it to attach to tmux with custom options etc.
+# post: tmux -CC attach -t sls
+
+windows:
+  - "sls-sns-cloudwatch":
+      root: ~/dev/gs/serverless-sns-cloudwatch-alarms
+      layout: 9c45,158x39,0,0{79x39,0,0[79x9,0,0,11,79x9,0,10,17,79x9,0,20,16,79x9,0,30,18],78x39,80,0[78x9,80,0,12,78x9,80,10,15,78x9,80,20,13,78x9,80,30,14]}
+      panes:
+        - grunt run:babel
+        - grunt run:s3-local
+        - ngrok http 3000
+        - ngrok http 8010
+        - cd ../dynamodb-local && java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar
+        - sls offline start
+        - ls
+        - ls
